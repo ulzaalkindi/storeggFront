@@ -1,10 +1,20 @@
 import Link from 'next/link'
+import { useEffect } from 'react'
+import Cookie from 'js-cookie'
+import jwt_decode from 'jwt-decode'
 
 interface AuthProps {
   isLogin?: boolean
 }
 export default function Auth(props: Partial<AuthProps>) {
   const { isLogin } = props
+  useEffect(() => {
+    const token = Cookie.get('token')
+    const jwtToken = atob(token)
+    const payload = jwt_decode(jwtToken)
+    const user = payload.player
+    console.log(user)
+  }, [])
 
   if (isLogin) {
     return (

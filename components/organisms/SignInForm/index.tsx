@@ -1,6 +1,38 @@
-import React from 'react'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import React, { useState } from 'react'
+import { ToastContainer, toast } from 'react-toastify'
+import jwt_decode from 'jwt-decode'
+import Cookie from 'js-cookie'
+import 'react-toastify/dist/ReactToastify.css'
+import { setLogin } from '../../../services/auth'
 
 export default function SignInForm() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const router = useRouter()
+  const onSubmit = async () => {
+    const data = {
+      email,
+      password,
+    }
+    // console.log('email: ', data)
+    if (!email || !password) {
+      toast.error('Email or password must not null')
+    } else {
+      const response = await setLogin(data)
+      if (response.error) {
+        toast.error(response.message)
+      } else {
+        toast.success('Login berhasil')
+        const { token } = response.data
+        const tokenBase64 = btoa(token)
+        console.log(tokenBase64)
+        Cookie.set('token', tokenBase64, { expires: 1 })
+        // router.push('/')
+      }
+    }
+  }
   return (
     <>
       <div className="pt-50">
@@ -17,6 +49,8 @@ export default function SignInForm() {
           name="email"
           aria-describedby="email"
           placeholder="Enter your email address"
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
         />
       </div>
       <div className="pt-30">
@@ -33,24 +67,28 @@ export default function SignInForm() {
           name="password"
           aria-describedby="password"
           placeholder="Your password"
+          value={password}
+          onChange={(event) => setPassword(event.target.value)}
         />
       </div>
       <div className="button-group d-flex flex-column mx-auto pt-50">
-        <a
+        <button
+          type="button"
           className="btn btn-sign-in fw-medium text-lg text-white rounded-pill mb-16"
-          href="/sign-up-photo"
-          role="button"
+          onClick={onSubmit}
         >
           Continue to Sign In
-        </a>
-        <a
-          className="btn btn-sign-up fw-medium text-lg color-palette-1 rounded-pill"
-          href="/sign-up"
-          role="button"
-        >
-          Sign Up
-        </a>
+        </button>
+        <Link href="/sign-up">
+          <a
+            className="btn btn-sign-up fw-medium text-lg color-palette-1 rounded-pill"
+            role="button"
+          >
+            Sign Up
+          </a>
+        </Link>
       </div>
+      <ToastContainer />
     </>
   )
 }
