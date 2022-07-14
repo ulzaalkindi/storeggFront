@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function CompleteCheckout() {
   return (
     <section className="complete-checkout mx-auto pt-lg-145 pb-lg-145 pt-100 pb-80">
@@ -49,10 +51,7 @@ export default function CompleteCheckout() {
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
-              <path
-                d="M254.212 33.9492H185.98V111.44H254.212V33.9492Z"
-                fill="#B4C2D1"
-              />
+              <path d="M254.212 33.9492H185.98V111.44H254.212V33.9492Z" fill="#B4C2D1" />
               <path
                 d="M254.212 33.9492H208.553V111.44H254.212V33.9492Z"
                 fill="url(#paint0_linear)"
@@ -77,14 +76,8 @@ export default function CompleteCheckout() {
                 d="M338.349 90.2587C340.401 90.2587 342.453 88.1924 342.453 86.1261C342.453 84.0595 340.401 81.9932 338.349 81.9932C336.297 81.9932 334.245 84.0595 334.245 86.1261C334.245 88.1924 336.297 90.2587 338.349 90.2587Z"
                 fill="url(#paint5_linear)"
               />
-              <path
-                d="M285.506 49.9639H44.3849V291.733H285.506V49.9639Z"
-                fill="white"
-              />
-              <path
-                d="M286.019 49.9639H111.591V291.733H286.019V49.9639Z"
-                fill="#E6ECF5"
-              />
+              <path d="M285.506 49.9639H44.3849V291.733H285.506V49.9639Z" fill="white" />
+              <path d="M286.019 49.9639H111.591V291.733H286.019V49.9639Z" fill="#E6ECF5" />
               <path
                 d="M77.7316 49.9639H44.3849V291.733H77.7316V49.9639Z"
                 fill="url(#paint6_linear)"
@@ -118,10 +111,7 @@ export default function CompleteCheckout() {
                 d="M315.775 211.661V289.667C315.775 293.802 312.696 296.901 308.592 296.901H181.876C177.772 296.901 174.694 293.802 174.694 289.667V211.661C174.694 207.528 177.772 204.429 181.876 204.429H308.592C312.696 204.429 315.775 207.528 315.775 211.661Z"
                 fill="url(#paint8_linear)"
               />
-              <path
-                d="M315.775 224.059H174.694V241.107H315.775V224.059Z"
-                fill="#526DFF"
-              />
+              <path d="M315.775 224.059H174.694V241.107H315.775V224.059Z" fill="#526DFF" />
               <path
                 d="M256.778 271.07H243.952C242.413 271.07 241.387 270.037 241.387 268.487C241.387 266.938 242.413 265.904 243.952 265.904H256.778C258.317 265.904 259.343 266.938 259.343 268.487C258.83 270.037 257.804 271.07 256.778 271.07Z"
                 fill="white"
@@ -250,22 +240,21 @@ export default function CompleteCheckout() {
           </svg>
         </div>
         <div className="pt-70 pb-50">
-          <h2 className="text-4xl fw-bold text-center color-palette-1 mb-10">
-            Checkout Completed
-          </h2>
+          <h2 className="text-4xl fw-bold text-center color-palette-1 mb-10">Checkout Completed</h2>
           <p className="text-lg text-center color-palette-1 m-0">
             Kami akan periksa pembayaran Anda
             <br className="d-sm-block d-none" /> dan menghubungi via WhatsApp
           </p>
         </div>
         <div className="button-group d-flex flex-column mx-auto">
-          <a
-            className="btn btn-dashboard fw-medium text-lg text-white rounded-pill mb-16"
-            href="/member"
-            role="button"
-          >
-            My Dashboard
-          </a>
+          <Link href="/member">
+            <a
+              className="btn btn-dashboard fw-medium text-lg text-white rounded-pill mb-16"
+              role="button"
+            >
+              My Dashboard
+            </a>
+          </Link>
           <a
             className="btn btn-whatsapp fw-medium text-lg color-palette-1 rounded-pill"
             href="https://wa.me/62895346395295"
@@ -276,5 +265,5 @@ export default function CompleteCheckout() {
         </div>
       </div>
     </section>
-  )
+  );
 }

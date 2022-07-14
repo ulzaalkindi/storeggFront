@@ -1,38 +1,60 @@
+/* eslint-disable eol-last */
 export interface CategoryTypes {
-    _id:string;
-    name:string;
-    __v:number;
+  _id: string;
+  name: string;
+  __v: number;
 }
 
 export interface GameItemTypes {
-    _id:string;
-    status:string;
-    name:string;
-    thumbnail:string;
-    category:CategoryTypes;
+  _id: string;
+  status: string;
+  name: string;
+  thumbnail: string;
+  category: CategoryTypes;
 }
 export interface BanksTypes {
-    _id:string;
-    name:string;
-    bankName:string;
-    noRekening:string;
+  _id: string;
+  name: string;
+  bankName: string;
+  noRekening: string;
 }
 
 export interface PaymentTypes {
-    _id: string;
-    type:string;
-    status:string;
-    banks : BanksTypes[]
+  _id: string;
+  type: string;
+  status: string;
+  banks: BanksTypes[];
 }
 
 export interface NominalTypes {
-    _id:string;
-    coinQuantity:number;
-    coinName:string;
-    price:number;
+  _id: string;
+  coinQuantity: number;
+  coinName: string;
+  price: number;
 }
 
 export interface LoginTypes {
-    email:string,
-    password:string
+  email: string;
+  password: string;
+}
+
+export interface UserTypes {
+  id: string;
+  username: string;
+  email: string;
+  name: string;
+  avatar: string;
+}
+
+export interface JWTPayloadTypes {
+  player: UserTypes;
+  iat: number;
+}
+export interface CheckoutTypes {
+  voucher: string;
+  nominal: number;
+  payment: string;
+  bank: string;
+  name: string;
+  accountUser: string;
 }

@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React from 'react'
 import NumberFormat from 'react-number-format'
 
@@ -5,15 +7,17 @@ interface NominalItemProps {
   _id: string
   coinQuantity: number
   coinName: string
-  price: number
+  price: number,
+  onChange: () => void;
 }
 export default function NominalItem(props: NominalItemProps) {
-  const { _id, coinQuantity, coinName, price } = props
+  const { _id, coinQuantity, coinName, price, onChange } = props
 
   return (
     <label
       className="col-lg-4 col-sm-6 ps-md-15 pe-md-15 pt-md-15 pb-md-15 pt-10 pb-10"
       htmlFor={_id}
+      onChange={onChange}
     >
       <input
         className="d-none"

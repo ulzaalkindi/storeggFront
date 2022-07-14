@@ -1,20 +1,37 @@
 import Link from 'next/link'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Cookie from 'js-cookie'
-import jwt_decode from 'jwt-decode'
+import jwtDecode from 'jwt-decode'
+import { useRouter } from 'next/router';
+import { JWTPayloadTypes, UserTypes } from '../../../services/data-types';
 
-interface AuthProps {
-  isLogin?: boolean
-}
-export default function Auth(props: Partial<AuthProps>) {
-  const { isLogin } = props
+export default function Auth() {
+  const [isLogin, setIsLogin] = useState(false);
+  const router = useRouter();
+
+  const [user, setUser] = useState({
+    avatar: '',
+  })
   useEffect(() => {
     const token = Cookie.get('token')
-    const jwtToken = atob(token)
-    const payload = jwt_decode(jwtToken)
-    const user = payload.player
-    console.log(user)
+    if (token) {
+      const jwtToken = atob(token)
+      const payload: JWTPayloadTypes = jwtDecode(jwtToken)
+      const userFromPaylaoad: UserTypes = payload.player
+      // dibawah ini karena urlnya mengarah ke heroku, jika yang lain maka beda lagi jadi
+      // langsung saja dipanggil userFrom payload
+      const IMG = process.env.NEXT_PUBLIC_IMG;
+      user.avatar = `${IMG}/${userFromPaylaoad.avatar}`;
+      setIsLogin(true)
+      setUser(user);
+    }
   }, [])
+
+  const onLogout = () => {
+    Cookie.remove('token');
+    setIsLogin(false)
+    router.push('/');
+  }
 
   if (isLogin) {
     return (
@@ -30,7 +47,7 @@ export default function Auth(props: Partial<AuthProps>) {
               aria-expanded="false"
             >
               <img
-                src="/img/avatar-1.png"
+                src={user.avatar}
                 className="rounded-circle"
                 width="40"
                 height="40"
@@ -63,9 +80,7 @@ export default function Auth(props: Partial<AuthProps>) {
               </Link>
             </li>
             <li>
-              <Link href="/sign-in">
-                <a className="dropdown-item text-lg color-palette-2">Log Out</a>
-              </Link>
+              <button type="button" onClick={onLogout} className="dropdown-item text-lg color-palette-2">Log Out</button>
             </li>
           </ul>
         </div>
