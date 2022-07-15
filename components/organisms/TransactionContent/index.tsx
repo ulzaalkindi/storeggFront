@@ -1,18 +1,43 @@
-import React from 'react'
-import ButtonTab from './ButtonTab'
-import TableRow from './TableRow'
+import React, { useCallback, useEffect, useState } from 'react';
+import NumberFormat from 'react-number-format';
+import { toast } from 'react-toastify';
+import { getMemberTransactions } from '../../../services/member';
+import ButtonTab from './ButtonTab';
+import TableRow from './TableRow';
 
 export default function TransactionContent() {
+  const [total, setTotal] = useState(0);
+  const [transaction, setTransaction] = useState([]);
+  const IMG = process.env.NEXT_PUBLIC_IMG;
+  const getMemberTransactionAPI = useCallback(async () => {
+    const response = await getMemberTransactions();
+    if (response.error) {
+      toast.error(response.message);
+    } else {
+      console.log('data: ', response.data);
+      setTransaction(response.data.data);
+      setTotal(response.data.total);
+      console.log('databroo: ', response.data.data);
+      console.log('totalbroo: ', response.data.total);
+    }
+  }, [getMemberTransactions]);
+  useEffect(() => {
+    getMemberTransactionAPI();
+  }, []);
   return (
     <main className="main-wrapper">
       <div className="ps-lg-0">
-        <h2 className="text-4xl fw-bold color-palette-1 mb-30">
-          My Transactions
-        </h2>
+        <h2 className="text-4xl fw-bold color-palette-1 mb-30">My Transactions</h2>
         <div className="mb-30">
           <p className="text-lg color-palette-2 mb-12">You’ve spent</p>
           <h3 className="text-5xl fw-medium color-palette-1">
-            Rp 4.518.000.500
+            <NumberFormat
+              displayType="text"
+              value={total}
+              prefix="Rp. "
+              decimalSeparator=","
+              thousandSeparator="."
+            />
           </h3>
         </div>
         <div className="row mt-30 mb-20">
@@ -26,9 +51,7 @@ export default function TransactionContent() {
           </div>
         </div>
         <div className="latest-transaction">
-          <p className="text-lg fw-medium color-palette-1 mb-14">
-            Latest Transactions
-          </p>
+          <p className="text-lg fw-medium color-palette-1 mb-14">Latest Transactions</p>
           <div className="main-content main-content-table overflow-auto">
             <table className="table table-borderless">
               <thead>
@@ -43,43 +66,21 @@ export default function TransactionContent() {
                 </tr>
               </thead>
               <tbody id="list_status_item">
-                <TableRow
-                  title="Mobile Legends: The New Battle 2021"
-                  image="overview-1"
-                  category="Desktop"
-                  item={200}
-                  price={290000}
-                  status="Pending"
-                />
-                <TableRow
-                  title="Call of Duty:Modern"
-                  image="overview-2"
-                  category="Desktop"
-                  item={550}
-                  price={740000}
-                  status="Success"
-                />
-                <TableRow
-                  title="Clash of Clans"
-                  image="overview-3"
-                  category="Mobile"
-                  item={100}
-                  price={120000}
-                  status="Failed"
-                />
-                <TableRow
-                  title="The Royal Game"
-                  image="overview-4"
-                  category="Mobile"
-                  item={225}
-                  price={220000}
-                  status="Pending"
-                />
+                {transaction.map((item) => (
+                  <TableRow
+                    title={item.historyVoucherTopup.gameName}
+                    image={`${IMG}/${item.historyVoucherTopup.thumbnail}`}
+                    category={item.historyVoucherTopup.category}
+                    item={`${item.historyVoucherTopup.coinQuantity} ${item.historyVoucherTopup.coinName}`}
+                    price={290000}
+                    status="Pending"
+                  />
+                ))}
               </tbody>
             </table>
           </div>
         </div>
       </div>
     </main>
-  )
+  );
 }

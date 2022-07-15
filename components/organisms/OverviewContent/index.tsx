@@ -1,19 +1,48 @@
-import React from 'react'
-import Category from './Category'
-import TableRow from './TableRow'
+import React, { useCallback, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { HistoryTransactionTypes, TopupCategoriesTypes } from '../../../services/data-types';
+import { getMemberOverview } from '../../../services/member';
+import Category from './Category';
+import TableRow from './TableRow';
 
 export default function OverviewContent() {
+  const [count, setCount] = useState([]);
+  const [data, setData] = useState([]);
+
+  const IMG = process.env.NEXT_PUBLIC_IMG;
+
+  const getMemberOverviewAPI = useCallback(async () => {
+    const response = await getMemberOverview();
+    if (response.error) {
+      toast.error(response.message);
+    } else {
+      setCount(response.data.count);
+      setData(response.data.data);
+    }
+  }, [getMemberOverview]);
+
+  useEffect(() => {
+    getMemberOverviewAPI();
+  }, []);
+
   return (
     <main className="main-wrapper">
       <div className="ps-lg-0">
         <h2 className="text-4xl fw-bold color-palette-1 mb-30">Overview</h2>
         <div className="top-up-categories mb-30">
-          <p className="text-lg fw-medium color-palette-1 mb-14">
-            Top Up Categories
-          </p>
+          <p className="text-lg fw-medium color-palette-1 mb-14">Top Up Categories</p>
           <div className="main-content">
             <div className="row">
-              <Category nominal={18000500} icon="ic-desktop">
+              {count.map((item: TopupCategoriesTypes) => (
+                <Category
+                  key={item._id}
+                  nominal={item.value}
+                  icon={item.name === 'Mobile' ? 'ic-mobile' : 'ic-desktop'}
+                >
+                  Game <br /> {item.name}
+                </Category>
+              ))}
+              {/* <Category nominal={18000500} icon="ic-desktop">
                 Game <br /> Desktop
               </Category>
               <Category nominal={8445000} icon="ic-mobile">
@@ -21,14 +50,12 @@ export default function OverviewContent() {
               </Category>
               <Category nominal={5000000} icon="ic-desktop">
                 Others <br /> Categories
-              </Category>
+              </Category> */}
             </div>
           </div>
         </div>
         <div className="latest-transaction">
-          <p className="text-lg fw-medium color-palette-1 mb-14">
-            Latest Transactions
-          </p>
+          <p className="text-lg fw-medium color-palette-1 mb-14">Latest Transactions</p>
           <div className="main-content main-content-table overflow-auto">
             <table className="table table-borderless">
               <thead>
@@ -42,43 +69,22 @@ export default function OverviewContent() {
                 </tr>
               </thead>
               <tbody>
-                <TableRow
-                  title="Mobile Legend: The New Battle 2022"
-                  categori="Desktop"
-                  image="overview-1"
-                  item={200}
-                  price={290000}
-                  status="Pending"
-                />
-                <TableRow
-                  title="Call of Duty:Modern"
-                  categori="Desktop"
-                  image="overview-2"
-                  item={550}
-                  price={740000}
-                  status="Success"
-                />
-                <TableRow
-                  title="Clash of Clans"
-                  categori="Mobile"
-                  image="overview-3"
-                  item={100}
-                  price={120000}
-                  status="Failed"
-                />
-                <TableRow
-                  title="The Royal Game"
-                  categori="Mobile"
-                  image="overview-4"
-                  item={225}
-                  price={200000}
-                  status="Pending"
-                />
+                {data.map((item: HistoryTransactionTypes) => (
+                  <TableRow
+                    key={item._id}
+                    title={item.historyVoucherTopup.gameName}
+                    categori={item.historyVoucherTopup.category}
+                    image={`${IMG}/${item.historyVoucherTopup.thumbnail}`}
+                    item={`${item.historyVoucherTopup.coinQuantity} ${item.historyVoucherTopup.coinName}`}
+                    price={item.value}
+                    status={item.status}
+                  />
+                ))}
               </tbody>
             </table>
           </div>
         </div>
       </div>
     </main>
-  )
+  );
 }

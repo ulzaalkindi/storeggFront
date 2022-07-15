@@ -1,13 +1,13 @@
 /* eslint-disable eol-last */
-import jwtDecode from 'jwt-decode'
-import Image from 'next/image'
-import CheckoutConfirmation from '../components/organisms/CheckoutConfirmation'
-import CheckoutDetail from '../components/organisms/CheckoutDetail'
-import CheckoutItem from '../components/organisms/CheckoutItem'
-import { JWTPayloadTypes, UserTypes } from '../services/data-types'
+import jwtDecode from 'jwt-decode';
+import Image from 'next/image';
+import CheckoutConfirmation from '../components/organisms/CheckoutConfirmation';
+import CheckoutDetail from '../components/organisms/CheckoutDetail';
+import CheckoutItem from '../components/organisms/CheckoutItem';
+import { JWTPayloadTypes, UserTypes } from '../services/data-types';
 
 interface CheckoutProps {
-  user: UserTypes
+  user: UserTypes;
 }
 
 export default function Checkout(props: CheckoutProps) {
@@ -23,9 +23,7 @@ export default function Checkout(props: CheckoutProps) {
         </div>
         <div className="title-text pt-md-50 pt-0">
           <h2 className="text-4xl fw-bold color-palette-1 mb-10">Checkout</h2>
-          <p className="text-lg color-palette-1 mb-0">
-            Waktunya meningkatkan cara bermain
-          </p>
+          <p className="text-lg color-palette-1 mb-0">Waktunya meningkatkan cara bermain</p>
         </div>
         <CheckoutItem />
         <hr />
@@ -33,10 +31,18 @@ export default function Checkout(props: CheckoutProps) {
         <CheckoutConfirmation />
       </div>
     </section>
-  )
+  );
 }
 
-export async function getServerSideProps({ req }) {
+interface GetServerSideTypes {
+  req: {
+    cookies: {
+      token: string;
+    };
+  };
+}
+
+export async function getServerSideProps({ req }: GetServerSideTypes) {
   const { token } = req.cookies;
   if (!token) {
     return {
@@ -44,16 +50,16 @@ export async function getServerSideProps({ req }) {
         destination: '/sign-in',
         permanent: false,
       },
-    }
+    };
   }
   const jwtToken = Buffer.from(token, 'base64').toString('ascii');
-  const payload: JWTPayloadTypes = jwtDecode(jwtToken)
-  const userFromPaylaoad: UserTypes = payload.player
+  const payload: JWTPayloadTypes = jwtDecode(jwtToken);
+  const userFromPaylaoad: UserTypes = payload.player;
   const IMG = process.env.NEXT_PUBLIC_IMG;
   userFromPaylaoad.avatar = `${IMG}/${userFromPaylaoad.avatar}`;
   return {
     props: {
       user: userFromPaylaoad,
     },
-  }
+  };
 }

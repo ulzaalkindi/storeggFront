@@ -1,14 +1,15 @@
-import Image from 'next/image'
-import React, { ReactNode } from 'react'
+import Image from 'next/image';
+import React, { ReactNode } from 'react';
+import NumberFormat from 'react-number-format';
 
 interface CategoriProps {
-  children: ReactNode
-  nominal: number
-  icon: 'ic-desktop' | 'ic-mobile'
+  children: ReactNode;
+  nominal: number;
+  icon: 'ic-desktop' | 'ic-mobile';
 }
 
 export default function Category(props: CategoriProps) {
-  const { children, nominal, icon } = props
+  const { children, nominal, icon } = props;
   return (
     <div className="col-lg-4 ps-15 pe-15 pb-lg-0 pb-4">
       <div className="categories-card">
@@ -18,9 +19,17 @@ export default function Category(props: CategoriProps) {
         </div>
         <div>
           <p className="text-sm color-palette-2 mb-1">Total Spent</p>
-          <p className="text-2xl color-palette-1 fw-medium m-0">{nominal}</p>
+          <p className="text-2xl color-palette-1 fw-medium m-0">
+            <NumberFormat
+              displayType="text"
+              value={nominal}
+              prefix="Rp. "
+              decimalSeparator=","
+              thousandSeparator="."
+            />
+          </p>
         </div>
       </div>
     </div>
-  )
+  );
 }
