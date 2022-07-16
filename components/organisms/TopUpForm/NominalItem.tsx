@@ -1,17 +1,17 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-import React from 'react'
-import NumberFormat from 'react-number-format'
+import React from 'react';
+import NumberFormat from 'react-number-format';
 
 interface NominalItemProps {
-  _id: string
-  coinQuantity: number
-  coinName: string
-  price: number,
+  _id: string;
+  coinQuantity: number;
+  coinName: string;
+  price: number;
   onChange: () => void;
 }
 export default function NominalItem(props: NominalItemProps) {
-  const { _id, coinQuantity, coinName, price, onChange } = props
+  const { _id, coinQuantity, coinName, price, onChange } = props;
 
   return (
     <label
@@ -19,18 +19,11 @@ export default function NominalItem(props: NominalItemProps) {
       htmlFor={_id}
       onChange={onChange}
     >
-      <input
-        className="d-none"
-        type="radio"
-        id={_id}
-        name="topup"
-        value={_id}
-      />
+      <input className="d-none" type="radio" id={_id} name="topup" value={_id} />
       <div className="detail-card">
         <div className="d-flex justify-content-between">
           <p className="text-3xl color-palette-1 m-0">
-            <span className="fw-medium">{coinQuantity}</span>
-            {coinName}
+            <span className="fw-medium">{`${coinQuantity} ${coinName}`}</span>
           </p>
           <svg
             id="icon-check"
@@ -61,5 +54,5 @@ export default function NominalItem(props: NominalItemProps) {
         </p>
       </div>
     </label>
-  )
+  );
 }

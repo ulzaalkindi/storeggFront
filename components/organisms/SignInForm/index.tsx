@@ -1,43 +1,38 @@
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import React, { useState } from 'react'
-import { toast } from 'react-toastify'
-import Cookie from 'js-cookie'
-import { setLogin } from '../../../services/auth'
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+import { toast } from 'react-toastify';
+import Cookie from 'js-cookie';
+import { setLogin } from '../../../services/auth';
 
 export default function SignInForm() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const router = useRouter()
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const router = useRouter();
   const onSubmit = async () => {
     const data = {
       email,
       password,
-    }
-    // console.log('email: ', data)
+    };
     if (!email || !password) {
-      toast.error('Email or password must not null')
+      toast.error('Email or password must not null');
     } else {
-      const response = await setLogin(data)
+      const response = await setLogin(data);
       if (response.error) {
-        toast.error(response.message)
+        toast.error(response.message);
       } else {
-        toast.success('Login berhasil')
-        const { token } = response.data
-        const tokenBase64 = btoa(token)
-        // console.log(tokenBase64)
-        Cookie.set('token', tokenBase64, { expires: 1 })
-        router.push('/')
+        toast.success('Login berhasil');
+        const { token } = response.data;
+        const tokenBase64 = btoa(token);
+        Cookie.set('token', tokenBase64, { expires: 1 });
+        router.push('/');
       }
     }
-  }
+  };
   return (
     <>
       <div className="pt-50">
-        <label
-          htmlFor="email"
-          className="form-label text-lg fw-medium color-palette-1 mb-10"
-        >
+        <label htmlFor="email" className="form-label text-lg fw-medium color-palette-1 mb-10">
           Email Address
         </label>
         <input
@@ -52,10 +47,7 @@ export default function SignInForm() {
         />
       </div>
       <div className="pt-30">
-        <label
-          htmlFor="password"
-          className="form-label text-lg fw-medium color-palette-1 mb-10"
-        >
+        <label htmlFor="password" className="form-label text-lg fw-medium color-palette-1 mb-10">
           Password
         </label>
         <input
@@ -87,5 +79,5 @@ export default function SignInForm() {
         </Link>
       </div>
     </>
-  )
+  );
 }

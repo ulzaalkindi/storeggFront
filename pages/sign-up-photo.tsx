@@ -1,60 +1,61 @@
-import Image from 'next/image'
-import { useRouter } from 'next/router'
-import { useCallback, useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
-import { setSignUp } from '../services/auth'
-import { getGameCategory } from '../services/player'
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { useCallback, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { setSignUp } from '../services/auth';
+import { CategoryTypes } from '../services/data-types';
+import { getGameCategory } from '../services/player';
 
 export default function SignUpPhoto() {
-  const router = useRouter()
-  const [categories, setCategories] = useState([])
-  const [favorite, setFavorite] = useState('')
-  const [image, setImage] = useState('')
-  const [imagePreview, setImagePreview] = useState('/icon/upload.svg')
+  const router = useRouter();
+  const [categories, setCategories] = useState([]);
+  const [favorite, setFavorite] = useState('');
+  const [image, setImage] = useState<any>('');
+  const [imagePreview, setImagePreview] = useState<any>('/icon/upload.svg');
   const [localForm, setLocalForm] = useState({
     name: '',
     email: '',
-  })
+  });
 
   const getGameCategoryAPI = useCallback(async () => {
-    const data = await getGameCategory()
-    setCategories(data)
-    setFavorite(data[0]._id)
-  }, [getGameCategory])
+    const data = await getGameCategory();
+    setCategories(data);
+    setFavorite(data[0]._id);
+  }, [getGameCategory]);
 
   useEffect(() => {
-    getGameCategoryAPI()
-  }, [])
+    getGameCategoryAPI();
+  }, []);
 
   useEffect(() => {
-    const getLocalForm = localStorage.getItem('user-form')
-    setLocalForm(JSON.parse(getLocalForm!))
-  }, [])
+    const getLocalForm = localStorage.getItem('user-form');
+    setLocalForm(JSON.parse(getLocalForm!));
+  }, []);
   const onSubmit = async () => {
-    const getLocalForm = await localStorage.getItem('user-form')
-    const form = JSON.parse(getLocalForm!)
+    const getLocalForm = await localStorage.getItem('user-form');
+    const form = JSON.parse(getLocalForm!);
 
-    const data = new FormData()
+    const data = new FormData();
 
-    data.append('image', image)
-    data.append('email', form.email)
-    data.append('name', form.name)
-    data.append('password', form.password)
-    data.append('phoneNumber', '085326715997')
-    data.append('role', 'user')
-    data.append('status', 'Y')
-    data.append('favorite', favorite)
+    data.append('image', image);
+    data.append('email', form.email);
+    data.append('name', form.name);
+    data.append('password', form.password);
+    data.append('phoneNumber', '085326715997');
+    data.append('role', 'user');
+    data.append('status', 'Y');
+    data.append('favorite', favorite);
 
-    const result = await setSignUp(data)
+    const result = await setSignUp(data);
     if (result.error) {
-      toast.error(result.message)
+      toast.error(result.message);
     } else {
-      toast.success('Register Berhasil')
+      toast.success('Register Berhasil');
 
-      router.push('/sign-up-success')
-      localStorage.removeItem('user-form')
+      router.push('/sign-up-success');
+      localStorage.removeItem('user-form');
     }
-  }
+  };
   return (
     <section className="sign-up-photo mx-auto pt-lg-227 pb-lg-227 pt-130 pb-50">
       <div className="container mx-auto">
@@ -78,19 +79,15 @@ export default function SignUpPhoto() {
                     name="avatar"
                     accept="image/png, image/jpeg"
                     onChange={(event) => {
-                      const img = event.target.files[0]
-                      setImagePreview(URL.createObjectURL(img))
-                      return setImage(img)
+                      const img = event.target.files![0];
+                      setImagePreview(URL.createObjectURL(img));
+                      return setImage(img);
                     }}
                   />
                 </div>
               </div>
-              <h2 className="fw-bold text-xl text-center color-palette-1 m-0">
-                {localForm.name}
-              </h2>
-              <p className="text-lg text-center color-palette-1 m-0">
-                {localForm.email}
-              </p>
+              <h2 className="fw-bold text-xl text-center color-palette-1 m-0">{localForm.name}</h2>
+              <p className="text-lg text-center color-palette-1 m-0">{localForm.email}</p>
               <div className="pt-50 pb-50">
                 <label
                   htmlFor="category"
@@ -106,7 +103,7 @@ export default function SignUpPhoto() {
                   value={favorite}
                   onChange={(event) => setFavorite(event.target.value)}
                 >
-                  {categories.map((category) => (
+                  {categories.map((category: CategoryTypes) => (
                     <option key={category._id} value={category._id}>
                       {category.name}
                     </option>
@@ -135,5 +132,5 @@ export default function SignUpPhoto() {
         </form>
       </div>
     </section>
-  )
+  );
 }

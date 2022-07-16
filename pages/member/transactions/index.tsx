@@ -1,7 +1,5 @@
-import jwtDecode from 'jwt-decode';
 import Sidebar from '../../../components/organisms/Sidebar';
 import TransactionContent from '../../../components/organisms/TransactionContent';
-import { JWTPayloadTypes, UserTypes } from '../../../services/data-types';
 
 export default function Transactions() {
   return (
@@ -29,14 +27,7 @@ export async function getServerSideProps({ req }: GetServerSideTypes) {
       },
     };
   }
-  const jwtToken = Buffer.from(token, 'base64').toString('ascii');
-  const payload: JWTPayloadTypes = jwtDecode(jwtToken);
-  const userFromPaylaoad: UserTypes = payload.player;
-  const IMG = process.env.NEXT_PUBLIC_IMG;
-  userFromPaylaoad.avatar = `${IMG}/${userFromPaylaoad.avatar}`;
   return {
-    props: {
-      user: userFromPaylaoad,
-    },
+    props: {},
   };
 }

@@ -12,11 +12,35 @@ export async function getMemberOverview() {
   });
 }
 
-export async function getMemberTransactions() {
-  const url = `${API_URL}/${API_VERSION}/players/history`;
+export async function getMemberTransactions(valueParams: string) {
+  let params = '';
+  if (valueParams === 'all') {
+    params = '';
+  } else {
+    params = `?status=${valueParams}`;
+  }
+  const url = `${API_URL}/${API_VERSION}/players/history${params}`;
   return callAPI({
     url,
     method: 'GET',
+    token: true,
+  });
+}
+
+export async function getTransactionDetail(id: string, token: string) {
+  const url = `${API_URL}/${API_VERSION}/players/history/${id}/detail`;
+  return callAPI({
+    url,
+    method: 'GET',
+    serverToken: token,
+  });
+}
+export async function updateProfile(data: FormData) {
+  const url = `${API_URL}/${API_VERSION}/players/profile`;
+  return callAPI({
+    url,
+    method: 'PUT',
+    data,
     token: true,
   });
 }
